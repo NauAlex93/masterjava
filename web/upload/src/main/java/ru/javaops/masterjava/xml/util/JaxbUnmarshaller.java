@@ -3,6 +3,7 @@ package ru.javaops.masterjava.xml.util;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.XMLStreamReader;
 import javax.xml.validation.Schema;
 import java.io.InputStream;
 import java.io.Reader;
@@ -15,19 +16,19 @@ public class JaxbUnmarshaller {
         unmarshaller = ctx.createUnmarshaller();
     }
 
-    public synchronized void setSchema(Schema schema) {
+    public void setSchema(Schema schema) {
         unmarshaller.setSchema(schema);
     }
 
-    public synchronized Object unmarshal(InputStream is) throws JAXBException {
-        return unmarshaller.unmarshal(is);
+    public <T> T unmarshal(InputStream is) throws JAXBException {
+        return (T) unmarshaller.unmarshal(is);
     }
 
-    public synchronized Object unmarshal(Reader reader) throws JAXBException {
-        return unmarshaller.unmarshal(reader);
+    public <T> T unmarshal(Reader reader) throws JAXBException {
+        return (T) unmarshaller.unmarshal(reader);
     }
 
-    public Object unmarshal(String str) throws JAXBException {
-        return unmarshal(new StringReader(str));
-    }
+    public <T> T unmarshal(XMLStreamReader reader, Class<T> elementClass) throws JAXBException {
+            return unmarshaller.unmarshal(reader, elementClass).getValue();
+        }
 }
